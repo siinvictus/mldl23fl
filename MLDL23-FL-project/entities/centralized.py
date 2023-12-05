@@ -63,12 +63,13 @@ class Centralized:
             print(f'dir name {dirname}  and filenames{filenames}')
             for filename in filenames:
                 #print(filename)
-                data = json.load(open(os.path.join(dirname, '/kaggle/input/femnist/FEMNIST/all_data')))
+                data = json.load(open(os.path.join(dirname, filename)))
 
                 temp_df = pd.DataFrame(data['user_data'])
                 temp_df = temp_df.reset_index(drop=True)
                 df = pd.concat([df, temp_df], axis=1)  # ignore_index=True
         df = df.rename(index={0: "x", 1: "y"})
+        print(f'df {df}')
         return df
 
     def train_test_tensors(self, batch):
