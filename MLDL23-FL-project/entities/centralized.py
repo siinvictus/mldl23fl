@@ -63,7 +63,7 @@ class Centralized:
             print(f'dir name {dirname}  and filenames{filenames}')
             for filename in filenames:
                 #print(filename)
-                data = json.load(open(os.path.join(dirname, filename)))
+                data = json.load(open(os.path.join(dirname, '/kaggle/input/femnist/FEMNIST/all_data')))
 
                 temp_df = pd.DataFrame(data['user_data'])
                 temp_df = temp_df.reset_index(drop=True)
