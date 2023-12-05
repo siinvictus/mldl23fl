@@ -58,7 +58,9 @@ class Centralized:
     def get_data(self):
         df = pd.DataFrame()
         print('loading files.....')
+        print(f'file path {self.path}')
         for dirname, _, filenames in os.walk(self.path):
+            print(f'dir name {dirname}  and filenames{filename}')
             for filename in filenames:
                 #print(filename)
                 data = json.load(open(os.path.join(dirname, filename)))
