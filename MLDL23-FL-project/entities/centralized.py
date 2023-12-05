@@ -59,7 +59,7 @@ class Centralized:
         df = pd.DataFrame()
         print('loading files.....')
         print(f'file path {self.path}')
-        for dirname, _, filenames in os.walk(self.path):
+        for dirname, _, filenames in os.walk('/kaggle/input/femnist/FEMNIST/all_data'):
             print(f'dir name {dirname}  and filenames{filename}')
             for filename in filenames:
                 #print(filename)
