@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import os
+import time
 
 import os
 import sys
@@ -59,17 +60,19 @@ class Centralized:
         df = pd.DataFrame()
         print('loading files.....')
         print(f'file path {self.path}')
-        for dirname, _, filenames in os.walk('/kaggle/input/femnist/FEMNIST/all_data'):
+        start_t = time.time()
+        for dirname, _, filenames in os.walk(self.path):
             print(f'dir name {dirname}  and filenames{filenames}')
             for filename in filenames:
-                #print(filename)
+                print(filename)
                 data = json.load(open(os.path.join(dirname, filename)))
 
                 temp_df = pd.DataFrame(data['user_data'])
                 temp_df = temp_df.reset_index(drop=True)
                 df = pd.concat([df, temp_df], axis=1)  # ignore_index=True
+        end_t = time.time()
+        print(f'The end time of the data reading was {end_t - start_t}.')
         df = df.rename(index={0: "x", 1: "y"})
-        print(f'df {df}')
         return df
 
     def train_test_tensors(self, batch):
