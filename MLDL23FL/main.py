@@ -126,7 +126,7 @@ def gen_clients(args, train_datasets, test_datasets, model):
     # define loss function criterion = nn.CrossEntropyLoss()
     for i, datasets in enumerate([train_datasets, test_datasets]):
         for ds in datasets:
-            clients[i].append(Client(args, ds, model, optimizer = torch.optim.SGD(model.parameters(), lr=args.lr), id=i, test_client=i == 1))
+            clients[i].append(Client(args, ds, model, optimizer = torch.optim.SGD(model.parameters(), lr=args.lr), idx=i, test_client=i == 1))
     print(f'len {len(clients)}')
     return clients[0], clients[1]
 
