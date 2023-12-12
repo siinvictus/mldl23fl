@@ -101,6 +101,7 @@ class Server:
                 averaged_soln[key] = value.cuda() / total_client_sample
         return averaged_soln
     
+    
     def update_clients_model(clients,aggregated_params):
         for i, c in enumerate(clients):
             c.model.load_state_dict(aggregated_params)
