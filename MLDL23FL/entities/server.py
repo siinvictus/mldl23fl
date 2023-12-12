@@ -26,6 +26,7 @@ class Server:
         '''
         num_clients = min(self.args.clients_per_round, len(self.train_clients))
         sel_clients = np.random.choice(self.train_clients, num_clients, replace=False)
+        print(sel_clients)
         return sel_clients
 
     def train_round(self, clients):

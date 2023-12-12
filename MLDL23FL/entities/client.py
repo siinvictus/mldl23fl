@@ -29,7 +29,7 @@ class Client:
         self.len_dataset = len(self.dataset)
 
     def __str__(self):
-        return self.name
+        return self.idx
 
     @staticmethod
     def update_metric(metric, outputs, labels, key):
