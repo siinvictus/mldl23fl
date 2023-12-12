@@ -102,8 +102,8 @@ class Server:
         return averaged_soln
     
     
-    def update_clients_model(clients,aggregated_params):
-        for i, c in enumerate(clients):
+    def update_clients_model(self,clients,aggregated_params):
+        for i, c in enumerate(self.train_clients):
             c.model.load_state_dict(aggregated_params)
         
     
@@ -119,6 +119,8 @@ class Server:
             # our addition
             # take selected clients
             sel_clients = self.select_clients()
+            if r != 0:
+                self.update_clients_model(sel_clients, aggregated_params)
             print(f"Round {r + 1}/{self.args.num_rounds}")
 
             # Train the model on the selected clients 
@@ -135,17 +137,15 @@ class Server:
 
             self.model.load_state_dict(aggregated_params)
             
-            self.update_clients_model(sel_clients, aggregated_params)
-
             # Evaluate on the train clients
-            train_accuracy = self.eval_train(sel_clients)
+            train_accuracy = self.eval_train(sel_clients,aggregated_params)
             print(f"Train Accuracy for round {r + 1} is : {train_accuracy:.4f}")
 
             # Test on the test clients
             test_accuracy = self.test(aggregated_params)
             print(f"Test Accuracy for round {r + 1}: {test_accuracy:.4f}")
 
-    def eval_train(self, clients):
+    def eval_train(self, clients, aggregated_params):
         """
         This method handles the evaluation on the train clients
         """
@@ -154,6 +154,7 @@ class Server:
         total_samples = 0
         with torch.no_grad():
             for client in clients:
+                client.model.load_state_dict(aggregated_params)
                 client_samples, client_correct = client.test(self.metrics, 'eval_train')
                 total_correct += client_correct
                 total_samples += client_samples
