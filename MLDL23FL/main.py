@@ -129,7 +129,7 @@ def gen_clients(args, train_datasets, test_datasets, model):
         for ds in datasets:
             clients[i].append(Client(args, ds, model, optimizer = torch.optim.SGD(model.parameters(), lr=args.lr), idx=idx, test_client=i == 1))
         idx +=1
-    print(f'client {(clients)}, len {len(clients)}')
+    #print(f'client {(clients)}, len {len(clients)}')
     return clients[0], clients[1]
 
 
