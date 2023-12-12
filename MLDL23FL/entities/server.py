@@ -95,7 +95,7 @@ class Server:
                     base[key] = (client_samples * value.type(torch.FloatTensor))
                 
 
-        averaged_soln = copy.deepcopy(self.model)
+        averaged_soln = copy.deepcopy(self.model.state_dict())
         for key, value in base.items():
             if total_client_sample != 0:
                 averaged_soln[key] = value.cuda() / total_client_sample
@@ -142,7 +142,7 @@ class Server:
             print(f"Train Accuracy for round {r + 1} is : {train_accuracy:.4f}")
 
             # Test on the test clients
-            test_accuracy = self.test()
+            test_accuracy = self.test(aggregated_params)
             print(f"Test Accuracy for round {r + 1}: {test_accuracy:.4f}")
 
     def eval_train(self, clients):
@@ -160,7 +160,7 @@ class Server:
         accuracy = total_correct / total_samples
         return accuracy
 
-    def test(self):
+    def test(self,aggregated_params):
         """
         This method handles the evaluation of the test_clients
         """
@@ -168,6 +168,7 @@ class Server:
         total_samples = 0
         with torch.no_grad():
             for client in self.test_clients:  # we don't select for test we run it on all
+                client.model.load_state_dict(aggregated_params)
                 client_samples, client_correct = client.test(self.metrics, 'test')
                 total_correct += client_correct
                 total_samples += client_samples
