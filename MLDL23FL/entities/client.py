@@ -55,7 +55,7 @@ class Client:
         # self.optim_scheduler.step()
         tot_correct_predictions = 0
         running_loss = 0.0
-        epoch_loss = 0
+        i = 0
         for cur_step, (images, labels) in enumerate(self.train_loader):
             images = images.cuda()
             labels = labels.cuda()
@@ -71,14 +71,14 @@ class Client:
             running_loss += loss.item()
 
             self.optimizer.step()
-            epoch_loss +=1
+            i +=1
             
             predictions = torch.argmax(outputs, dim=1)
 
             correct_predictions = torch.sum(torch.eq(predictions, labels)).item()
             tot_correct_predictions += correct_predictions
 
-        loss_for_this_epoch = running_loss / epoch_loss
+        loss_for_this_epoch = running_loss / i
         accuracy = tot_correct_predictions / self.len_dataset * 100
         return loss_for_this_epoch, accuracy
        
