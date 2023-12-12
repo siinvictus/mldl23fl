@@ -132,14 +132,18 @@ class Client:
         """
         # initial_model_params = copy.deepcopy(self.model.state_dict())
         # maybe it is needed
+        
+        loss = []
 
         for epoch in range(self.args.num_epochs):
             print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: START EPOCH={epoch + 1}/{self.args.num_epochs}")
             
-            avg_loss, train_accuracy = self.run_epoch()
+            loss_each_epoch, train_accuracy = self.run_epoch()
+            loss.append(loss_each_epoch)
             
-            print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")
-            print(f"Loss={round(avg_loss, 3)}, Accuracy={round(train_accuracy, 2)}%")
+        avg_loss = loss.mean()
+        print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")
+        print(f"Loss={round(avg_loss, 3)}, Accuracy={round(train_accuracy, 2)}%")
 
         return (len(self.train_loader),self.model.state_dict())
 
