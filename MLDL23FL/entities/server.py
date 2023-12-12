@@ -102,7 +102,7 @@ class Server:
         return averaged_soln
     
     
-    def update_clients_model(self,clients,aggregated_params):
+    def update_clients_model(self,aggregated_params):
         for i, c in enumerate(self.train_clients):
             c.model.load_state_dict(aggregated_params)
         
@@ -120,7 +120,7 @@ class Server:
             # take selected clients
             sel_clients = self.select_clients()
             if r != 0:
-                self.update_clients_model(sel_clients, aggregated_params)
+                self.update_clients_model(aggregated_params=aggregated_params)
             print(f"Round {r + 1}/{self.args.num_rounds}")
 
             # Train the model on the selected clients 
