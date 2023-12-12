@@ -46,17 +46,20 @@ class Server:
             # which outputs model.state_dic 
             # which has as keys 'layer_weights':
             # layer_bias: 
-            client_update = c.train()
-            updates.append(client_update)
+            num_samples,client_update = c.train()
+            updates.append((num_samples,copy.deepcopy(client_update))) #deep copy to not change the original dictionary of client
         return updates
 
     def aggregate(self, updates):
-
+        """
         # our addition
         """
+        """"
         This method handles the FedAvg aggregation
         :param updates: updates received from the clients
         :return: aggregated parameters
+        """
+    
         """
         if len(updates) == 0:
             # the original model
@@ -78,8 +81,30 @@ class Server:
 
             # Average the weights
             averaged_state_dict[layer_name] /= len(updates)
+        """
+            
+        total_client_sample = 0.
+        base = OrderedDict()
+        for (client_samples, client_model) in updates:
+            total_client_sample += client_samples
+            for key, value in client_model.items():
+                if key in base:
+                    base[key] += (client_samples * value.type(torch.FloatTensor))
+                else:
+                    base[key] = (client_samples * value.type(torch.FloatTensor))
+                
 
-        return averaged_state_dict
+        averaged_soln = copy.deepcopy(self.model)
+        for key, value in base.items():
+            if total_client_sample != 0:
+                averaged_soln[key] = value.cuda() / total_client_sample
+        return averaged_soln
+    
+    def update_clients_model(clients,aggregated_params):
+        for i, c in enumerate(clients):
+            c.model.load_state_dict(aggregated_params)
+        
+    
 
     def train(self):
         '''
@@ -107,6 +132,8 @@ class Server:
             # we call the method model.load_state_dict from the "module" class
 
             self.model.load_state_dict(aggregated_params)
+            
+            self.update_clients_model(sel_clients, aggregated_params)
 
             # Evaluate on the train clients
             train_accuracy = self.eval_train(sel_clients)

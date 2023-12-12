@@ -124,9 +124,11 @@ def set_metrics(args):
 def gen_clients(args, train_datasets, test_datasets, model):
     clients = [[], []]
     # define loss function criterion = nn.CrossEntropyLoss()
+    idx = 0 
     for i, datasets in enumerate([train_datasets, test_datasets]):
         for ds in datasets:
-            clients[i].append(Client(args, ds, model, optimizer = torch.optim.SGD(model.parameters(), lr=args.lr), idx=i, test_client=i == 1))
+            clients[i].append(Client(args, ds, model, optimizer = torch.optim.SGD(model.parameters(), lr=args.lr), idx=idx, test_client=i == 1))
+        idx +=1
     print(f'client {(clients)}, len {len(clients)}')
     return clients[0], clients[1]
 
