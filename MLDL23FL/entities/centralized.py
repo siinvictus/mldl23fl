@@ -28,7 +28,8 @@ IMAGE_SIZE = 28
 
 class Centralized:
 
-    def __init__(self, data_path, model, optimizer, criterion, device, transforms):
+    def __init__(self,args, data_path, model, optimizer, criterion, device, transforms):
+        self.args = args
         self.path = data_path
         self.model = model
         self.optimizer = optimizer
@@ -83,7 +84,7 @@ class Centralized:
 
     def training(self, torch_train):
 
-        train_loader = DataLoader(torch_train, batch_size=64, shuffle=True)
+        train_loader = DataLoader(torch_train, batch_size=self.args.bs, shuffle=True)
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         for epoch in range(5):  # loop over the dataset multiple times
             running_loss = 0.0
