@@ -162,7 +162,7 @@ def main():
         data_path = os.path.join('data', 'femnist', 'data', 'all_data')
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         optimizer = torch.optim.SGD(model.parameters(),
-                                    lr=args.lr)  # define loss function criterion = nn.CrossEntropyLoss()
+                                    lr=args.lr, momentum= args.m , weight_decay=args.wd)  # define loss function criterion = nn.CrossEntropyLoss()
         criterion = nn.CrossEntropyLoss()
         data_transform = transforms.ToTensor()
         centralized = Centralized(data_path=data_path, model=model, optimizer=optimizer, criterion=criterion,
