@@ -139,8 +139,13 @@ class Client:
             
             loss_each_epoch, train_accuracy = self.run_epoch()
             
-        print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")
-        print(f"Loss of last epoch={round(loss_each_epoch, 3)}, Accuracy={round(train_accuracy, 2)}%")
+            if epoch != self.args.num_epochs:
+                print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")
+                print(f"Loss={round(loss_each_epoch, 3)}, Accuracy={round(train_accuracy, 2)}%")
+            else:
+                print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")
+                print(f"Loss last epochs={round(loss_each_epoch, 3)}, Accuracy={round(train_accuracy, 2)}%")
+            
 
         return (len(self.train_loader),self.model.state_dict())
 
