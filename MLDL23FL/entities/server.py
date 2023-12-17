@@ -46,12 +46,12 @@ class Server:
                 if np.random.random() < 0.5:
                     c = np.random.choice(list_client10, p=list_p10, replace=False)
                     if c not in sel_clients:
-                        sel_clients += c
+                        sel_clients.append(c)
                         i+=1
                 else:
                     c = np.random.choice(list_client90, p=list_p90, replace=False)
                     if c not in sel_clients:
-                        sel_clients += c
+                        sel_clients.append(c)
                         i+=1
             
             print(f'len clients:{len(sel_clients)}')
