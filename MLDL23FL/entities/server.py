@@ -46,15 +46,15 @@ class Server:
             b = 0
             while i != (num_clients):
                 if np.random.random() < 0.5:
-                    c = np.random.choice(list_client10,  p=list_p10, replace=False)
+                    c = np.random.choice(list_client10, p=list_p10, replace=False)
                     if c not in sel_clients:
-                        sel_clients.append(c)
+                        sel_clients += c
                         i+=1
                         a+=1
                 else:
-                    c = np.random.choice(list_client90,  p=list_p90, replace=False)
+                    c = np.random.choice(list_client90, p=list_p90, replace=False)
                     if c not in sel_clients:
-                        sel_clients.append(c)
+                        sel_clients += c
                         i+=1
                         b+=1
             
