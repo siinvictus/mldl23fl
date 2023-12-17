@@ -35,13 +35,30 @@ class Server:
             with 30% of clients being selected with probability 0.0001 at each round
             """
             n10perc = math.ceil(len(self.train_clients)*0.1)
-            list_probability10 =  [0.5] * n10perc
-            list_probability90 =  [1/(len(self.train_clients)*0.9)] * (len(self.train_clients) - n10perc) 
-            list_probability = list_probability10 + list_probability90 
-            print(f'len number of clients: {len(self.train_clients)}')
-            print(f'list of prob: {list_probability}')
-            sel_clients = np.random.choice(self.train_clients, num_clients,  p=list_probability, replace=False)
-            #print(sel_clients)
+            list_client10 =  self.train_clients[:n10perc]
+            list_client90 = self.train_clients[n10perc:]
+            list_p10 = [1/n10perc] * n10perc
+            list_p90 = [1/(len(self.train_clients)-n10perc)] * (len(self.train_clients)-n10perc)
+            sel_clients = []
+            i=0
+            a = 0
+            b = 0
+            while i != (num_clients):
+                if np.random.random() < 0.5:
+                    c = np.random.choice(list_client10,1,  p=list_p10, replace=False)
+                    if c not in sel_clients:
+                        sel_clients.append(c)
+                        i+=1
+                        a+=1
+                else:
+                    c = np.random.choice(list_client90,1,  p=list_p90, replace=False)
+                    if c not in sel_clients:
+                        sel_clients.append(c)
+                        i+=1
+                        b+=1
+            
+            print(f'len clients:{len(sel_clients)}')
+            print(f'taken from a:{a}, taken from b:{b}')   
         return sel_clients
 
     def train_round(self, clients):
