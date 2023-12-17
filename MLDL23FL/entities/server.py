@@ -42,25 +42,20 @@ class Server:
             list_p90 = [1/(len(self.train_clients)-n10perc)] * (len(self.train_clients)-n10perc)
             sel_clients = []
             i=0
-            a = 0
-            b = 0
             while i != (num_clients):
                 if np.random.random() < 0.5:
                     c = np.random.choice(list_client10, p=list_p10, replace=False)
                     if c not in sel_clients:
                         sel_clients += c
                         i+=1
-                        a+=1
                 else:
                     c = np.random.choice(list_client90, p=list_p90, replace=False)
                     if c not in sel_clients:
                         sel_clients += c
                         i+=1
-                        b+=1
             
             print(f'len clients:{len(sel_clients)}')
             print(f'selected client: {sel_clients}')
-            print(f'taken from a:{a}, taken from b:{b}')   
         return sel_clients
 
     def train_round(self, clients):
