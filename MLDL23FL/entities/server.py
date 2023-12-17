@@ -28,6 +28,7 @@ class Server:
         if self.args.client_select == 0:
             num_clients = min(self.args.clients_per_round, len(self.train_clients))
             sel_clients = np.random.choice(self.train_clients, num_clients, replace=False)
+        
         elif self.args.client_select == 1:  
             num_clients = min(self.args.clients_per_round, len(self.train_clients))
             """
@@ -45,7 +46,7 @@ class Server:
             b = 0
             while i != (num_clients):
                 if np.random.random() < 0.5:
-                    c = np.random.choice(list_client10,1,  p=list_p10, replace=False)
+                    c = np.random.choice(list_client10, 1,  p=list_p10, replace=False)
                     if c not in sel_clients:
                         sel_clients.append(c)
                         i+=1
@@ -58,6 +59,7 @@ class Server:
                         b+=1
             
             print(f'len clients:{len(sel_clients)}')
+            print(f'selected client: {sel_clients}')
             print(f'taken from a:{a}, taken from b:{b}')   
         return sel_clients
 
