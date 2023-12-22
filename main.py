@@ -17,6 +17,7 @@ from entities.centralized import Centralized
 from torchvision import transforms
 from entities.server import Server
 from utils.args import get_parser
+from torchsummary import summary
 
 from models.cnn import CNN
 from utils.stream_metrics import StreamSegMetrics, StreamClsMetrics
@@ -155,6 +156,10 @@ def main():
     print('Initializing model...')
     model = model_init(args)
     model.cuda()
+    if args.view_summary == True: 
+        print('Summary')
+        print(summary(model))
+        #exit(1)
     print('Done.')
 
     if args.federated:

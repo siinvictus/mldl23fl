@@ -6,7 +6,6 @@ import torch
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torchsummary import summary
 import os
 from PIL import Image
 
@@ -180,5 +179,4 @@ class Centralized:
         val_loader = DataLoader(torch_test, batch_size=self.args.bs, shuffle=False)
         print('Validating')
         self.accuracy_of_model(val_loader)
-        print('Summary')
-        print(summary(self.model))
+
