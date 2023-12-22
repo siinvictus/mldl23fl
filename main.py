@@ -147,9 +147,6 @@ def gen_clients(args, train_datasets, test_datasets, model):
     print(f'Clients len {len(clients)}, train {len(clients[0])}, test {len(clients[1])}')
     return clients[0], clients[1]
 
-def count_parameters(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
 def main():
     parser = get_parser()
     args = parser.parse_args()
@@ -161,8 +158,6 @@ def main():
     if args.view_summary == True: 
         print('Summary')
         print(summary(model,(1, 28, 28)))
-        print('Summary2')
-        print(f'Number of parameters: {count_parameters(model=model)}')
         #exit(1)
     print('Done.')
 
