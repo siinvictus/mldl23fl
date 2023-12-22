@@ -158,7 +158,7 @@ def main():
     model.cuda()
     if args.view_summary == True: 
         print('Summary')
-        print(summary(model))
+        print(summary(model,(1, 28, 28)))
         #exit(1)
     print('Done.')
 
