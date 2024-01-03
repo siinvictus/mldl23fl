@@ -122,7 +122,7 @@ class Server:
     def aggregate(self, updates):
         total_client_sample = 0.
         base = OrderedDict()
-        for (client_samples, client_model) in updates:
+        for (client_samples, client_model,_) in updates:
             total_client_sample += client_samples
             for key, value in client_model.items():
                 if key in base:
