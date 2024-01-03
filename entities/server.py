@@ -86,7 +86,7 @@ class Server:
                 list_pk.append(c.get_pk())
             if r == 0:
                 sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
-            else:
+            #else:
                     
             
             
