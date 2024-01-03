@@ -145,7 +145,7 @@ class Server:
         It calls every method within server - basically the main of server
         Then, this method it's called in "main"
         '''
-        m = int(self.power_of_choice_C * len(self.train_clients))
+        m = int(self.args.power_of_choice_C * len(self.train_clients))
         print(f'Your m in {m}')
         print(f'The K is {len(self.train_clients)}')
 
