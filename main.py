@@ -180,7 +180,7 @@ def main():
         metrics = set_metrics(args)
         # print(metrics)
         print('Gererating clients...')
-        train_clients, test_clients = gen_clients(args, train_datasets, test_datasets, model,total_train_data)
+        train_clients, test_clients = gen_clients(args, train_datasets, test_datasets, model)
         print('Done.')
         print('Creating server')
         server = Server(args, train_clients, test_clients, model, metrics)
