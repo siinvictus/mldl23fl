@@ -86,7 +86,7 @@ class Server:
                 list_pk.append(c.get_pk())
             if r == 0:
                 sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
-            #else:
+            else:
                     
             
             
@@ -115,15 +115,14 @@ class Server:
             # which outputs model.state_dic 
             # which has as keys 'layer_weights':
             # layer_bias: 
-            if self.args.client_select == 3:
-                num_samples,client_update, client_loss = c.train()
-                updates.append((num_samples,copy.deepcopy(client_update), client_loss)) #deep copy to not change the original dictionary of client
+            num_samples,client_update,client_loss = c.train()
+            updates.append((num_samples,copy.deepcopy(client_update),client_loss)) #deep copy to not change the original dictionary of client
         return updates
 
     def aggregate(self, updates):
         total_client_sample = 0.
         base = OrderedDict()
-        for (client_samples, client_model, _) in updates:
+        for (client_samples, client_model) in updates:
             total_client_sample += client_samples
             for key, value in client_model.items():
                 if key in base:
