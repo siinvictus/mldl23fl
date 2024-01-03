@@ -11,7 +11,7 @@ from utils.utils import HardNegativeMining, MeanReduction
 
 class Client:
 
-    def __init__(self, args, dataset, model, optimizer, idx,total_train_data, test_client=False):
+    def __init__(self, args, dataset, model, optimizer, idx, test_client=False):
         """
         putting the optimizer as an input parameter
         """
@@ -27,7 +27,7 @@ class Client:
         self.criterion = nn.CrossEntropyLoss(ignore_index=255, reduction='mean')
         self.reduction = HardNegativeMining() if self.args.hnm else MeanReduction()
         self.len_dataset = len(self.dataset)
-        self.pk = self.len_dataset / total_train_data
+        self.pk = None
 
     def __str__(self):
         return self.idx
@@ -135,3 +135,9 @@ class Client:
 
     def get_pk(self):
         return self.pk
+    
+    def set_pk(self, total_train_data):
+        self.pk = len(self.train_loader) / total_train_data
+    
+    def get_total_train(self):
+        return len(self.train_loader)
