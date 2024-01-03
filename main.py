@@ -104,13 +104,14 @@ def get_datasets(args):
         train_data_dir = os.path.join('data', 'femnist', 'data', 'niid' if niid else 'iid', 'train')
         test_data_dir = os.path.join('data', 'femnist', 'data', 'niid' if niid else 'iid', 'test')
         train_data, test_data = read_femnist_data(train_data_dir, test_data_dir)
+        total_train_data = len(train_data)
 
         for user, data in train_data.items():
             train_datasets.append(Femnist(data, train_transforms, user))
         for user, data in test_data.items():
             test_datasets.append(Femnist(data, test_transforms, user))
 
-        return train_datasets, test_datasets
+        return train_datasets, test_datasets,total_train_data
     else:
         all_data_dir = os.path.join('data', 'femnist', 'data', 'all_data')
         all_data = read_femnist_data(all_data_dir)
@@ -133,17 +134,20 @@ def set_metrics(args):
     return metrics
 
 
-def gen_clients(args, train_datasets, test_datasets, model):
+def gen_clients(args, train_datasets, test_datasets, model, total_train_data):
     clients = [[], []]
     # define loss function criterion = nn.CrossEntropyLoss()
     idx = 0 
     for i, datasets in enumerate([train_datasets, test_datasets]):
         for ds in datasets:
-            clients[i].append(Client(args, ds, model,
+            clients[i].append(Client(args, ds, model, total_train_data= total_train_data,
                                      optimizer = torch.optim.SGD(model.parameters(), lr=args.lr),
                                      idx=idx, test_client=i == 1)
                               )
             idx += 1
+    for c in  clients[0]:
+        print(f'pk: {c.get_pk()}')
+        
     print(f'Clients len {len(clients)}, train {len(clients[0])}, test {len(clients[1])}')
     return clients[0], clients[1]
 
@@ -163,13 +167,13 @@ def main():
 
     if args.federated:
         print('Generate datasets...')
-        train_datasets, test_datasets = get_datasets(args)
+        train_datasets, test_datasets,total_train_data = get_datasets(args)
         print('Done.')
 
         metrics = set_metrics(args)
         # print(metrics)
         print('Gererating clients...')
-        train_clients, test_clients = gen_clients(args, train_datasets, test_datasets, model)
+        train_clients, test_clients = gen_clients(args, train_datasets, test_datasets, model,total_train_data)
         print('Done.')
         print('Creating server')
         server = Server(args, train_clients, test_clients, model, metrics)

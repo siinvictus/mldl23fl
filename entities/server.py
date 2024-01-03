@@ -53,6 +53,33 @@ class Server:
                     if c not in sel_clients:
                         sel_clients.append(c)
                         i+=1
+        
+        elif self.args.client_select == 2:  
+            num_clients = min(self.args.clients_per_round, len(self.train_clients))
+            """
+            with 10% of clients being selected with probability 0.5 at each round
+            with 30% of clients being selected with probability 0.0001 at each round
+            """
+            n30perc = math.ceil(len(self.train_clients)*0.3)
+            list_client10 =  self.train_clients[:n30perc]
+            list_client90 = self.train_clients[n30perc:]
+            list_p10 = [1/n30perc] * n30perc
+            list_p90 = [1/(len(self.train_clients)-n30perc)] * (len(self.train_clients)-n30perc)
+            sel_clients = []
+            i=0
+            while i != (num_clients):
+                if np.random.random() < 0.0001:
+                    c = np.random.choice(list_client10, p=list_p10, replace=False)
+                    if c not in sel_clients:
+                        sel_clients.append(c)
+                        i+=1
+                else:
+                    c = np.random.choice(list_client90, p=list_p90, replace=False)
+                    if c not in sel_clients:
+                        sel_clients.append(c)
+                        i+=1
+                        
+                    
             
             print(f'len clients:{len(sel_clients)}')
             print(f'selected client: {sel_clients}')
