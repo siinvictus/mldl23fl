@@ -105,6 +105,7 @@ def get_datasets(args):
         test_data_dir = os.path.join('data', 'femnist', 'data', 'niid' if niid else 'iid', 'test')
         train_data, test_data = read_femnist_data(train_data_dir, test_data_dir)
         total_train_data = len(train_data)
+        print(f'total train data: {total_train_data}')
 
         for user, data in train_data.items():
             train_datasets.append(Femnist(data, train_transforms, user))
@@ -145,8 +146,6 @@ def gen_clients(args, train_datasets, test_datasets, model, total_train_data):
                                      idx=idx, test_client=i == 1)
                               )
             idx += 1
-    for c in  clients[0]:
-        print(f'pk: {c.get_pk()}')
         
     print(f'Clients len {len(clients)}, train {len(clients[0])}, test {len(clients[1])}')
     return clients[0], clients[1]

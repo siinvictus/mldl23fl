@@ -82,46 +82,6 @@ class Client:
         loss_for_this_epoch = running_loss / i
         accuracy = tot_correct_predictions / self.len_dataset * 100
         return loss_for_this_epoch, accuracy
-       
-        """
-        criterion = nn.CrossEntropyLoss().to(self.device)
-        if self.optim == 'adam':
-            optimizer = optim.AdamW(self.model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
-        elif self.optim == 'SGD':
-            optimizer = optim.SGD(self.model.parameters(), lr=self.lr, weight_decay=self.weight_decay, momentum=self.momentum)
-        losses = np.empty(num_epochs)
-
-        for epoch in range(num_epochs):
-            self.model.train()
-            if self.mixup:
-                losses[epoch] = self.run_epoch_with_mixup(optimizer, criterion)
-            else:
-                losses[epoch] = self.run_epoch(optimizer, criterion)
-
-        self.losses = losses
-        update = self.model.state_dict()
-        return self.num_train_samples, update
-        
-
-        """
-        """
-        def run_epoch(self, optimizer, criterion):
-            running_loss = 0.0
-            i = 0
-            for j, data in enumerate(self.trainloader):
-                input_data_tensor, target_data_tensor = data[0].to(self.device), data[1].to(self.device)
-                optimizer.zero_grad()
-                outputs = self.model(input_data_tensor)
-                loss = criterion(outputs, target_data_tensor)
-                loss.backward()  # gradient inside the optimizer (memory usage increases here)
-                running_loss += loss.item()
-                optimizer.step()  # update of weights
-                i += 1
-            if i == 0:
-                print("Not running epoch", self.id)
-                return 0
-            return running_loss / i
-        """
 
        
 
