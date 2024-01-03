@@ -78,7 +78,11 @@ class Server:
                     if c not in sel_clients:
                         sel_clients.append(c)
                         i+=1
-                        
+        
+        elif self.args.client_select == 3:
+
+        
+                      
                     
             
             print(f'len clients:{len(sel_clients)}')
@@ -108,38 +112,6 @@ class Server:
         return updates
 
     def aggregate(self, updates):
-        """
-        # our addition
-        """
-        """"
-        This method handles the FedAvg aggregation
-        :param updates: updates received from the clients
-        :return: aggregated parameters
-        """
-    
-        """
-        if len(updates) == 0:
-            # the original model
-            return self.model.state_dict()  # No updates to aggregate
-
-        # Aggregate the model parameters using Federated Averaging
-        # sets a single dic for all clients as a global dic 
-        aggregated_params = OrderedDict()
-        # loops throught the updates list and takes the "mean" for each key for each element
-
-        averaged_state_dict = updates[0].copy()
-
-        # Iterate over the layers in the state dictionaries
-        for layer_name in averaged_state_dict.keys():
-            # Iterate over the state dictionaries
-            for state_dict in updates[1:]:
-                # Add the weights of the corresponding layer
-                averaged_state_dict[layer_name] += state_dict[layer_name]
-
-            # Average the weights
-            averaged_state_dict[layer_name] /= len(updates)
-        """
-            
         total_client_sample = 0.
         base = OrderedDict()
         for (client_samples, client_model) in updates:
@@ -170,6 +142,9 @@ class Server:
         It calls every method within server - basically the main of server
         Then, this method it's called in "main"
         '''
+        m = int(self.power_of_choice_C * len(self.train_clients))
+        print(f'Your m in {m}')
+        print(f'The K is {len(self.train_clients)}')
 
         for r in range(self.args.num_rounds):
             # our addition
