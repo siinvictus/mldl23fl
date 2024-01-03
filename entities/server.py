@@ -19,7 +19,7 @@ class Server:
 
 
 
-    def select_clients(self):
+    def select_clients(self,r):
         '''
         This method returns an array with the selected clients for the current round
         The way selection is done is by only considering the min number between
@@ -80,13 +80,16 @@ class Server:
                         i+=1
         
         elif self.args.client_select == 3:
-
-        
-                      
-                    
-            
+            num_clients = min(self.args.clients_per_round, len(self.train_clients)) # d = clients_per_round
+            list_pk =list()
+            for c in self.train_clients:
+                list_pk.append(c.get_pk())
+            if r == 0:
+                sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
+                
             print(f'len clients:{len(sel_clients)}')
-            print(f'selected client: {sel_clients}')
+            for c in sel_clients:
+                print(f'selected client id: {c.idx}, pk: {c.get_pk()}')
         return sel_clients
 
     def train_round(self, clients):
@@ -149,7 +152,7 @@ class Server:
         for r in range(self.args.num_rounds):
             # our addition
             # take selected clients
-            sel_clients = self.select_clients()
+            sel_clients = self.select_clients(r)
             if r != 0:
                 self.update_clients_model(aggregated_params=aggregated_params)
             print(f"Round {r + 1}/{self.args.num_rounds}")
