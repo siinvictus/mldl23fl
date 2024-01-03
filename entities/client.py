@@ -107,6 +107,9 @@ class Client:
                 last_epoch_loss = loss_each_epoch
                 print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")
                 print(f"Loss last epochs={round(last_epoch_loss, 3)}, Accuracy={round(train_accuracy, 2)}%")
+                
+        if self.args.select_clients == 3:
+            return (len(self.train_loader),self.model.state_dict()), last_epoch_loss
             
 
         return (len(self.train_loader),self.model.state_dict()) 
