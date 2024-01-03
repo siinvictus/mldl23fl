@@ -148,11 +148,16 @@ def gen_clients(args, train_datasets, test_datasets, model):
             idx += 1
     
     total_train_data = 0 
+    total_perc = 0
     for c in clients[0]:
         total_train_data += c.get_total_train() 
     for c in clients[0]:
         c.set_pk(total_train_data)
-        print(f'pk: {c.get_pk()}')
+        pk = c.get_pk()
+        total_perc += pk
+        print(f'pk: {pk}')
+        
+    print(f'total perc: {total_perc}')
         
         
     print(f'Clients len {len(clients)}, train {len(clients[0])}, test {len(clients[1])}')
