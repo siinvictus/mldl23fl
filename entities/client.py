@@ -109,7 +109,7 @@ class Client:
                 print(f"Loss last epochs={round(last_epoch_loss, 3)}, Accuracy={round(train_accuracy, 2)}%")
             
 
-        return (len(self.train_loader),self.model.state_dict(), last_epoch_loss) 
+        return (len(self.train_loader),self.model.state_dict(), loss_each_epoch) 
 
     def test(self, metric, key):
         """
