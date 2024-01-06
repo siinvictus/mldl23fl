@@ -92,12 +92,12 @@ class Server:
                 selected_D = random.sample(update, self.args.d_clients)
                 update = sorted(selected_D, key=lambda x: x[2], reverse=True)
                 for sel_c in update:
-                    print(f'C highest loss: {sel_c[3].idx}')
+                    print(f'D randomly selected C highest loss: {sel_c[3].idx}')
                 selected_for_loss = update[:m]  #selected based on the highest loss 
                 sel_clients = np.random.choice(self.train_clients, num_clients-m, p=list_pk, replace=False) #selected based on the pk the remaining 10-m
                 for sel_c in selected_for_loss:
                     sel_clients = np.append(sel_clients,sel_c[3])
-                    print(f'C highest loss: {sel_c[3].idx}')
+                    print(f'm selected C highest loss: {sel_c[3].idx}')
                 
             
             
