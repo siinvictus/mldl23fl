@@ -155,7 +155,7 @@ def gen_clients(args, train_datasets, test_datasets, model):
 
         
         
-    print(f'Clients len {len(clients)}, train {len(clients[0])}, test {len(clients[1])}')
+    print(f'Clients: Train {len(clients[0])}, Test {len(clients[1])}')
     return clients[0], clients[1]
 
 def main():
