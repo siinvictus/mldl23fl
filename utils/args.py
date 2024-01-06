@@ -9,8 +9,8 @@ def get_parser():
                         help='Rotate images for domain generalization')
     parser.add_argument('--d_clients', type=float, default=0,
                         help="The d subsect of clients in power of choices algorithm")
-    parser.add_argument('--power_of_choice_C', type=float, default=0,
-                        help="The C is the static varible thta determins m=c*K in power of choices algorithm")
+    parser.add_argument('--power_of_choice_m', type=float, default=0,
+                        help="The m=c*K in power of choices algorithm which will be half of d")
     parser.add_argument('--client_select', type=int, default=0, 
                         help='0:uniform distribution, 1:10% with 0.5 probability, 2:30% with 0.0001 probability')
     parser.add_argument('--view_summary', type=bool, default=False, 
