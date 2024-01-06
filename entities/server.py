@@ -89,7 +89,7 @@ class Server:
             if r == 0:
                 sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
             else:
-                selected_D = random.sample(update,self.args.d_clients)
+                selected_D = random.sample(update, self.args.d_clients)
                 update = sorted(selected_D, key=lambda x: x[2], reverse=True)
                 selected_for_loss = update[:m]  #selected based on the highest loss 
                 sel_clients = np.random.choice(self.train_clients, num_clients-m, p=list_pk, replace=False) #selected based on the pk the remaining 10-m
