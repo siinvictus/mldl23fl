@@ -19,7 +19,7 @@ class Server:
 
 
 
-    def select_clients(self,r, update = None):
+    def select_clients(self,r, update = None,m=None):
         '''
         This method returns an array with the selected clients for the current round
         The way selection is done is by only considering the min number between
@@ -81,17 +81,23 @@ class Server:
         
         elif self.args.client_select == 3:
             num_clients = min(self.args.clients_per_round, len(self.train_clients)) # d = clients_per_round
+            sel_clients = []
             list_pk =list()
             for c in self.train_clients:
                 list_pk.append(c.get_pk())
             if r == 0:
                 sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
             else:
-                update = sorted(update, key=lambda x: x[2], reverse=True)  
+                selected_D = np.random.choice(update,self.args.d_clients, replace =False)
+                update = sorted(selected_D, key=lambda x: x[2], reverse=True)
+                selected_for_loss = update[:m]  #selected based on the highest loss 
+                sel_clients = np.random.choice(self.train_clients, num_clients-m, p=list_pk, replace=False) #selected based on the pk the remaining 10-m
+                for sel_c in selected_for_loss:
+                    np.append(sel_clients,sel_c[3])
                 
             
             
-            print(f'update:{update}')
+            #print(f'update:{update}')
             print(f'len clients:{len(sel_clients)}')
             for c in sel_clients:
                 print(f'selected client id: {c.idx}, pk: {c.get_pk()}')
@@ -116,13 +122,13 @@ class Server:
             # which has as keys 'layer_weights':
             # layer_bias: 
             num_samples,client_update,client_loss = c.train()
-            updates.append((num_samples,copy.deepcopy(client_update),client_loss)) #deep copy to not change the original dictionary of client
+            updates.append((num_samples,copy.deepcopy(client_update),client_loss,c)) #deep copy to not change the original dictionary of client
         return updates
 
     def aggregate(self, updates):
         total_client_sample = 0.
         base = OrderedDict()
-        for (client_samples, client_model,_) in updates:
+        for (client_samples, client_model,_,_) in updates:
             total_client_sample += client_samples
             for key, value in client_model.items():
                 if key in base:
@@ -160,7 +166,7 @@ class Server:
             if r == 0:
                 sel_clients = self.select_clients(r)
             else:
-                sel_clients = self.select_clients(r,update = train_sel_c)
+                sel_clients = self.select_clients(r,update = train_sel_c, m=m)
                 
             if r != 0:
                 self.update_clients_model(aggregated_params=aggregated_params)

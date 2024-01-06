@@ -7,6 +7,8 @@ def get_parser():
                         help='Run the federated learning pipeline instead of the centralized version')
     parser.add_argument('--rotation', action='store_true', default=False,
                         help='Rotate images for domain generalization')
+    parser.add_argument('--d_clients', type=float, default=0,
+                        help="The d subsect of clients in power of choices algorithm")
     parser.add_argument('--power_of_choice_C', type=float, default=0,
                         help="The C is the static varible thta determins m=c*K in power of choices algorithm")
     parser.add_argument('--client_select', type=int, default=0, 
