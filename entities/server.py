@@ -94,7 +94,7 @@ class Server:
                 selected_for_loss = update[:m]  #selected based on the highest loss 
                 sel_clients = np.random.choice(self.train_clients, num_clients-m, p=list_pk, replace=False) #selected based on the pk the remaining 10-m
                 for sel_c in selected_for_loss:
-                    np.append(sel_clients,sel_c[3])
+                    sel_clients = np.append(sel_clients,sel_c[3])
                 
             
             
