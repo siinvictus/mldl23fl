@@ -164,7 +164,6 @@ class Server:
 
             # Train the model on the selected clients 
             # and ouputs "updates" the list with state_dic
-
             train_sel_c = self.train_round(sel_clients)
 
             # Aggregate the updates using FedAvg for the selected clients
