@@ -8,7 +8,7 @@ import torch
 import random
 import torch.nn.utils.prune as prune
 from torchsummary import summary
-from models.cnn import cnn 
+from models.cnn import CNN 
 
 
 class Server:
@@ -180,7 +180,7 @@ class Server:
                 
             if r != 0:
                 if self.args.prune == True:
-                    model_to_prune = cnn(num_classes=62)
+                    model_to_prune = CNN(num_classes=62)
                     model_to_prune.load_state_dict(aggregated_params)
                     #print(f'Model not pruned: {count_nonzero_parameters(model_to_prune)}')
                     parameters_to_prune = [(module, "weight") for module in  model_to_prune.modules()]
