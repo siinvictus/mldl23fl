@@ -190,7 +190,7 @@ class Server:
                                             amount=0.7,
                                             )
                     #print(f'Model pruned: {count_nonzero_parameters(parameters_to_prune)}')
-                    aggregated_params = parameters_to_prune
+                    aggregated_params = parameters_to_prune.named_parameters()
                     print(f'aggregated params: {aggregated_params}')
                 self.update_clients_model(aggregated_params=aggregated_params)
             print(f"Round {r + 1}/{self.args.num_rounds}")
