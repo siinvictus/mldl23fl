@@ -182,6 +182,8 @@ class Server:
                 if self.args.prune == True:
                     model_to_prune = CNN(num_classes=62)
                     model_to_prune.load_state_dict(aggregated_params)
+                    for n,p in model_to_prune:
+                        print(f'{n}, {p.size()}')
                     #print(f'Model not pruned: {count_nonzero_parameters(model_to_prune)}')
                     parameters_to_prune = [(module, "weight") for module in  model_to_prune.modules()]
                     prune.global_unstructured(parameters_to_prune,
