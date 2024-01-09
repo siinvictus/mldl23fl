@@ -219,8 +219,10 @@ class Server:
         """
         total_correct = 0
         total_samples = 0
+        num_client_test = min(self.args.clients_test, len(self.test_clients))
+        test_client = np.random.choice(self.test_clients, num_client_test, replace=False)
         with torch.no_grad():
-            for client in self.test_clients:  # we don't select for test we run it on all
+            for client in test_client:  # we don't select for test we run it on all
                 client.model.load_state_dict(aggregated_params)
                 client_samples, client_correct = client.test(self.metrics, 'test')
                 total_correct += client_correct

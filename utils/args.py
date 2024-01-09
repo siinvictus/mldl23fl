@@ -24,6 +24,7 @@ def get_parser():
     # keep the local epoc = 1 bcs of nnid setting risk overfitting 
     parser.add_argument('--num_epochs', type=int, default = 1, help='number of local epochs')
     parser.add_argument('--clients_per_round', type=int, default = 5, help='number of clients trained per round')
+    parser.add_argument('--clients_test', type=int, default = 2, help='number of clients tested per round')
     parser.add_argument('--hnm', action='store_true', default=False, help='Use hard negative mining reduction or not')
     parser.add_argument('--lr', type=float, default=0.05, help='learning rate')
     parser.add_argument('--bs', type=int, default= 32, help='batch size')
