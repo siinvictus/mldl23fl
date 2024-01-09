@@ -185,7 +185,7 @@ class Server:
                     for n,p in model_to_prune.named_parameters():
                         print(f'{n}, {p.size()}')
                     #print(f'Model not pruned: {count_nonzero_parameters(model_to_prune)}')
-                    parameters_to_prune = [(module, "weight") for module in  model_to_prune.modules()]
+                    parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Conv2d,  model_to_prune.modules())]
                     prune.global_unstructured(parameters_to_prune,
                                             pruning_method=prune.L1Unstructured,
                                             amount=0.7,
