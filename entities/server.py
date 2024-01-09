@@ -6,6 +6,8 @@ from collections import OrderedDict
 import numpy as np
 import torch
 import random
+import torch.nn.utils.prune as prune
+from torchsummary import summary
 
 
 class Server:
@@ -19,7 +21,7 @@ class Server:
         self.model_params_dict = copy.deepcopy(self.model.state_dict())
 
 
-
+    
     def select_clients(self,r, update = None,m=None):
         '''
         This method returns an array with the selected clients for the current round
@@ -153,6 +155,9 @@ class Server:
             c.model.load_state_dict(aggregated_params)
         
     
+    def count_nonzero_parameters(self,model):
+        non_zero_params = sum(p.numel() - torch.count_nonzero(p).item() for p in model.parameters())
+        return non_zero_params
 
     def train(self):
         '''
@@ -173,6 +178,12 @@ class Server:
                 sel_clients = self.select_clients(r,update = train_sel_c, m=m)
                 
             if r != 0:
+                if self.args.prune == True:
+                    model_prune = torch.nn.Sequential(aggregated_params)
+                    print(f'Model not pruned: {count_nonzero_parameters(model_prune)}')
+                    model_prune1 = prune.random_unstructured(model_prune, name="weight", amount=0.3)
+                    print(f'Model pruned: {count_nonzero_parameters(model_prune1)}')
+                    aggregated_params = model_prune1.state_dict()
                 self.update_clients_model(aggregated_params=aggregated_params)
             print(f"Round {r + 1}/{self.args.num_rounds}")
 
@@ -222,7 +233,7 @@ class Server:
         num_client_test = min(self.args.clients_test, len(self.test_clients))
         test_client = np.random.choice(self.test_clients, num_client_test, replace=False)
         with torch.no_grad():
-            for client in test_client:  # we don't select for test we run it on all
+            for client in test_client:  # we select randomly args.clients_test for testing the model.
                 client.model.load_state_dict(aggregated_params)
                 client_samples, client_correct = client.test(self.metrics, 'test')
                 total_correct += client_correct
