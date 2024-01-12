@@ -16,7 +16,7 @@ def get_parser():
     parser.add_argument('--linear', type=bool, default=False,
                         help='Prune linear layer')
     parser.add_argument('--structured', type=bool, default=False,
-                        help='Struct')
+                        help='Structured pruning, False unstructured')
     parser.add_argument('--amount_prune', type=float, default=0.2, help='Amount to prune')
     
     
