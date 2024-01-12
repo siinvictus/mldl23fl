@@ -128,27 +128,31 @@ class Server:
             # which outputs model.state_dic 
             # which has as keys 'layer_weights':
             # layer_bias: 
-            num_samples,client_update,client_loss = c.train()
-            updates.append((num_samples,copy.deepcopy(client_update),client_loss,c)) #deep copy to not change the original dictionary of client
+            num_samples,client_update,client_loss,sparsity = c.train()
+            updates.append((num_samples,copy.deepcopy(client_update),client_loss,c,sparsity)) #deep copy to not change the original dictionary of client
         return updates
 
     def aggregate(self, updates):
         total_client_sample = 0.
         base = OrderedDict()
-        for (client_samples, client_model,_,_) in updates:
+        mean_sparsity = 0 
+        tot_sparsity = 0
+        for (client_samples, client_model,_,_,sparsity) in updates:
             total_client_sample += client_samples
+            tot_sparsity += sparsity
             for key, value in client_model.items():
                 if key in base:
                     base[key] += (client_samples * value.type(torch.FloatTensor))
                 else:
                     base[key] = (client_samples * value.type(torch.FloatTensor))
+        mean_sparsity = tot_sparsity / self.args.num_clients
                 
 
         averaged_soln = copy.deepcopy(self.model.state_dict())
         for key, value in base.items():
             if total_client_sample != 0:
                 averaged_soln[key] = value.cuda() / total_client_sample
-        return averaged_soln
+        return averaged_soln, mean_sparsity
     
     
     def update_clients_model(self,aggregated_params):
@@ -188,7 +192,7 @@ class Server:
 
             # Aggregate the updates using FedAvg for the selected clients
             # returns 1 dicitionary with the "final" parameters of the round
-            aggregated_params = self.aggregate(train_sel_c)
+            aggregated_params, mean_sparsity = self.aggregate(train_sel_c)
 
             # Update the global model with the aggregated parameters
             # we call the method model.load_state_dict from the "module" class
@@ -202,6 +206,7 @@ class Server:
             # Test on the test clients
             test_accuracy = self.test(aggregated_params)
             print(f"Test Accuracy for round {r + 1}: {test_accuracy:.4f}")
+            print(f"Mean sparsity for round {r + 1}: {mean_sparsity:.4f}")
 
     def eval_train(self, clients, aggregated_params):
         """

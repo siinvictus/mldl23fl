@@ -135,27 +135,10 @@ class Client:
                 # Apply pruning to the entire model
                 for m in parameters_to_prune:
                     prune.ln_structured(m, name='weight', amount=self.args.amount_prune, n=1, dim=0)
-            """
-            print(f'Client id:{self.idx}')   
-            print(
-                "Global sparsity : {:.2f}%".format(
-                    100. * float(
-                        torch.sum(self.model.conv1.weight == 0)
-                        + torch.sum(self.model.conv2.weight == 0)
-                        + torch.sum(self.model.fc1.weight == 0)
-                        + torch.sum(self.model.fc2.weight == 0)
-                    )
-                    / float(
-                        self.model.conv1.weight.nelement()
-                        + self.model.conv2.weight.nelement()
-                        + self.model.fc1.weight.nelement()
-                        + self.model.fc2.weight.nelement()
-                    )
-                )
-            )
-                        
-            """
-        return (len(self.train_loader),self.model.state_dict(), last_epoch_loss) 
+            
+            sparsity = 100. * float(torch.sum(self.model.conv1.weight == 0)+ torch.sum(self.model.conv2.weight == 0)+ torch.sum(self.model.fc1.weight == 0)+ torch.sum(self.model.fc2.weight == 0)) / float(self.model.conv1.weight.nelement()+ self.model.conv2.weight.nelement()+ self.model.fc1.weight.nelement()+ self.model.fc2.weight.nelement())
+                    
+        return (len(self.train_loader),self.model.state_dict(), last_epoch_loss, sparsity) 
 
     def test(self, metric, key):
         """
