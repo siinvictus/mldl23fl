@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 import threading
 
 from utils.utils import HardNegativeMining, MeanReduction
+import torch.nn.utils.prune as prune
 
 
 class Client:
@@ -99,6 +100,15 @@ class Client:
             print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: START EPOCH={epoch + 1}/{self.args.num_epochs}")
             
             loss_each_epoch, train_accuracy = self.run_epoch()
+            if self.args.prune == True:
+                # Specify the pruning method (e.g., L1 unstructured pruning)
+                pruning_method = prune.L1Unstructured(amount=0.2)
+
+                # Apply pruning to the entire model
+                prune.global_unstructured(
+                    parameters=self.model.parameters(),
+                    pruning_method=pruning_method,
+                )
             
             if epoch != self.args.num_epochs-1: # All epoch 
                 print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: END   EPOCH={epoch + 1}/{self.args.num_epochs} - ",end="")

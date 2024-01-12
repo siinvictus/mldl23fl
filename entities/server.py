@@ -179,19 +179,6 @@ class Server:
                 sel_clients = self.select_clients(r,update = train_sel_c, m=m)
                 
             if r != 0:
-                if self.args.prune == True:
-                    model_to_prune = CNN(num_classes=62)
-                    model_to_prune.load_state_dict(aggregated_params)
-
-                    #print(f'Model not pruned: {count_nonzero_parameters(model_to_prune)}')
-                    parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Conv2d,  model_to_prune.modules())]
-                    prune.global_unstructured(parameters_to_prune,
-                                            pruning_method=prune.L1Unstructured,
-                                            amount=0.7,
-                                            )
-                    #print(f'Model pruned: {count_nonzero_parameters(parameters_to_prune)}')
-                    aggregated_params = parameters_to_prune.named_parameters()
-                    print(f'aggregated params: {aggregated_params}')
                 self.update_clients_model(aggregated_params=aggregated_params)
             print(f"Round {r + 1}/{self.args.num_rounds}")
 
