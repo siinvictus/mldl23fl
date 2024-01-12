@@ -103,11 +103,12 @@ class Client:
             if self.args.prune == True:
                 # Specify the pruning method (e.g., L1 unstructured pruning)
                 pruning_method = prune.L1Unstructured(amount=0.2)
+                parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.torch.nn.Linear,  self.model.modules())]
 
                 # Apply pruning to the entire model
-                print(f'model parameters:{self.model.parameters()}')
+                print(f'model parameters:{self.model.named_parameters()}')
                 prune.global_unstructured(
-                    parameters=self.model.parameters(),
+                    parameters=parameters_to_prune,
                     pruning_method=pruning_method,
                 )
             
