@@ -134,7 +134,7 @@ class Client:
                     parameters_to_prune = [module for module in filter(lambda m: type(m) == torch.nn.Linear,  self.model.modules())]
                 # Apply pruning to the entire model
                 for m in parameters_to_prune:
-                    prune.ln_structured.apply(m, name='weight', amount=self.args.amount_prune, n=1, dim=0)
+                    prune.ln_structured(m, name='weight', amount=self.args.amount_prune, n=1, dim=0)
             """
             print(f'Client id:{self.idx}')   
             print(
