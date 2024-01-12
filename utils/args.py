@@ -15,6 +15,9 @@ def get_parser():
                         help='Prune convolutional layer')
     parser.add_argument('--linear', type=bool, default=False,
                         help='Prune linear layer')
+    parser.add_argument('--amount_prune', type=float, default=0.2, help='Amount to prune')
+    
+    
     parser.add_argument('--power_of_choice_m', type=int, default=1,
                         help="The m=c*K in power of choices algorithm which will be half of d")
     parser.add_argument('--client_select', type=int, default=0, 
