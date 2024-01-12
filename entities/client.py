@@ -102,7 +102,10 @@ class Client:
             loss_each_epoch, train_accuracy = self.run_epoch()
             if self.args.prune == True:
                 # Specify the pruning method (e.g., L1 unstructured pruning)
-                parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
+                if self.args.conv == True:
+                    parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
+                if self.args.linear == True:
+                    parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Linear,  self.model.modules())]
 
                 # Apply pruning to the entire model
                 prune.global_unstructured(

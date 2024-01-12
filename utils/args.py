@@ -11,6 +11,10 @@ def get_parser():
                         help="The d subsect of clients in power of choices algorithm")
     parser.add_argument('--prune', type=bool, default=False,
                         help='Activate the pruning criteria')
+    parser.add_argument('--conv', type=bool, default=False,
+                        help='Prune convolutional layer')
+    parser.add_argument('--linear', type=bool, default=False,
+                        help='Prune linear layer')
     parser.add_argument('--power_of_choice_m', type=int, default=1,
                         help="The m=c*K in power of choices algorithm which will be half of d")
     parser.add_argument('--client_select', type=int, default=0, 
