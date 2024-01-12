@@ -15,6 +15,8 @@ def get_parser():
                         help='Prune convolutional layer')
     parser.add_argument('--linear', type=bool, default=False,
                         help='Prune linear layer')
+    parser.add_argument('--structured', type=bool, default=False,
+                        help='Struct')
     parser.add_argument('--amount_prune', type=float, default=0.2, help='Amount to prune')
     
     
