@@ -112,21 +112,9 @@ class Client:
         
         if self.args.prune == True:
             if self.args.conv == False and self.args.linear == False:
-                raise Exception("Choose a layer to prune")
-            # Specify the pruning method (e.g., L1 unstructured pruning)
-            if self.args.conv == True:
-                parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
-            if self.args.linear == True:
-                parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Linear,  self.model.modules())]
-            # Apply pruning to the entire model
-            prune.global_unstructured(
-                parameters=parameters_to_prune,
-                pruning_method=prune.L1Unstructured,
-                amount=self.args.amount_prune,
-            )
-            if self.args.structured == True:
-                if self.args.conv == False and self.args.linear == False:
                     raise Exception("Choose a layer to prune")
+            
+            if self.args.structured == True:
             # Specify the pruning method (e.g., L1 unstructured pruning)
                 if self.args.conv == True:
                     parameters_to_prune = [module for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
@@ -135,6 +123,21 @@ class Client:
                 # Apply pruning to the entire model
                 for m in parameters_to_prune:
                     prune.ln_structured(m, name='weight', amount=self.args.amount_prune, n=1, dim=0)
+           
+            else:
+                print(f'You are using unstructured pruning')
+                # Specify the pruning method (e.g., L1 unstructured pruning)
+                if self.args.conv == True:
+                    parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
+                if self.args.linear == True:
+                    parameters_to_prune = [(module, "weight") for module in filter(lambda m: type(m) == torch.nn.Linear,  self.model.modules())]
+                # Apply pruning to the entire model
+                prune.global_unstructured(
+                    parameters=parameters_to_prune,
+                    pruning_method=prune.L1Unstructured,
+                    amount=self.args.amount_prune,
+                )
+
             
             sparsity = 100. * float(torch.sum(self.model.conv1.weight == 0)+ torch.sum(self.model.conv2.weight == 0)+ torch.sum(self.model.fc1.weight == 0)+ torch.sum(self.model.fc2.weight == 0)) / float(self.model.conv1.weight.nelement()+ self.model.conv2.weight.nelement()+ self.model.fc1.weight.nelement()+ self.model.fc2.weight.nelement())
                     

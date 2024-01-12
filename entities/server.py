@@ -145,7 +145,7 @@ class Server:
                     base[key] += (client_samples * value.type(torch.FloatTensor))
                 else:
                     base[key] = (client_samples * value.type(torch.FloatTensor))
-        mean_sparsity = tot_sparsity / self.args.num_clients
+        mean_sparsity = tot_sparsity / self.args.clients_per_round
                 
 
         averaged_soln = copy.deepcopy(self.model.state_dict())
