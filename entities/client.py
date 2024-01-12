@@ -105,6 +105,7 @@ class Client:
                 pruning_method = prune.L1Unstructured(amount=0.2)
 
                 # Apply pruning to the entire model
+                print(f'model parameters:{self.model.parameters()}')
                 prune.global_unstructured(
                     parameters=self.model.parameters(),
                     pruning_method=pruning_method,
