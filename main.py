@@ -197,7 +197,7 @@ def main():
                 print('Training Domain for angle:', a)
                 fed_exec(args, model, rot_dataset=rot_dataset, angle=a)
         else:
-            if args.rotatation:
+            if args.rotation:
                 fed_exec(args, model, rot_dataset=rot_dataset)
             else:
                 fed_exec(args, model, train_datasets=train_datasets, test_datasets=test_datasets)
