@@ -119,6 +119,7 @@ def get_datasets(args):
         centralized_datasets = []
         for user,data in all_data:
             centralized_datasets.append(Femnist(data, train_transforms, user))
+        print(f'i m here')
 
 
 def set_metrics(args):
