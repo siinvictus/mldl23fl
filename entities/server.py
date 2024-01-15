@@ -206,7 +206,7 @@ class Server:
             # Test on the test clients
             test_accuracy = self.test(aggregated_params)
             print(f"Test Accuracy for round {r + 1}: {test_accuracy:.4f}")
-            print(f"Mean sparsity for round {r + 1}: {mean_sparsity:.4f}")
+            print(f"Mean sparsity for round {r + 1} (only for pruning): {mean_sparsity:.4f}")
 
     def eval_train(self, clients, aggregated_params):
         """
