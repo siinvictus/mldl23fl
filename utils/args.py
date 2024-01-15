@@ -5,8 +5,6 @@ def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--federated', action='store_true', default=False,
                         help='Run the federated learning pipeline instead of the centralized version')
-    parser.add_argument('--rotation', action='store_true', default=False,
-                        help='Rotate images for domain generalization')
     parser.add_argument('--d_clients', type=int, default=0,
                         help="The d subsect of clients in power of choices algorithm")
     parser.add_argument('--prune', type=bool, default=False,
@@ -26,6 +24,10 @@ def get_parser():
                         help='0:uniform distribution, 1:10% with 0.5 probability, 2:30% with 0.0001 probability')
     parser.add_argument('--view_summary', type=bool, default=False, 
                         help='View the model summary')
+    parser.add_argument('--rotation', action='store_true', default=False,
+                        help='Rotate images for domain generalization')
+    parser.add_argument('--loo', action='store_true', default=False,
+                        help='apply leave one out for domain generalization')
     parser.add_argument('--seed', type=int, default=0, help='random seed')
     parser.add_argument('--dataset', type=str, default='femnist', choices=['idda', 'femnist'], help='dataset name')
     parser.add_argument('--niid', action='store_true', default=False,
