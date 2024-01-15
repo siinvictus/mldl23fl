@@ -94,7 +94,7 @@ class Client:
         """
         # initial_model_params = copy.deepcopy(self.model.state_dict())
         # maybe it is needed
-        
+        sparsity = 0.0
 
         for epoch in range(self.args.num_epochs):
             print(f"tid={str(threading.get_ident())[-7:]} - k_id={self.idx}: START EPOCH={epoch + 1}/{self.args.num_epochs}")
@@ -115,6 +115,7 @@ class Client:
                     raise Exception("Choose a layer to prune")
             
             if self.args.structured == True:
+                print(f'You are using structured pruning')
             # Specify the pruning method (e.g., L1 unstructured pruning)
                 if self.args.conv == True:
                     parameters_to_prune = [module for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
