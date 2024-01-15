@@ -21,7 +21,7 @@ def get_parser():
     parser.add_argument('--power_of_choice_m', type=int, default=1,
                         help="The m=c*K in power of choices algorithm which will be half of d")
     parser.add_argument('--client_select', type=int, default=0, 
-                        help='0:uniform distribution, 1:10% with 0.5 probability, 2:30% with 0.0001 probability')
+                        help='0:uniform distribution, 1:10% with 0.5 probability, 2:30% with 0.0001 probability, 3:power of choices')
     parser.add_argument('--view_summary', type=bool, default=False, 
                         help='View the model summary')
     parser.add_argument('--rotation', action='store_true', default=False,
