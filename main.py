@@ -1,8 +1,8 @@
-import json
 import os
+import pprint
 import random
 import sys
-from collections import defaultdict
+
 
 import numpy as np
 import torch
@@ -15,13 +15,13 @@ from entities.client import Client
 
 from entities.centralized import Centralized
 from torchvision import transforms
+
 from entities.server import Server
 from utils.args import get_parser
-from torchsummary import summary
 
 from models.cnn import CNN
 from utils.stream_metrics import StreamSegMetrics, StreamClsMetrics
-
+from utils.data_generation import *
 
 def set_seed(random_seed):
     random.seed(random_seed)
@@ -58,69 +58,10 @@ def model_init(args):
     else:
         raise NotImplementedError
 
-
-def get_transforms(args):
-    # TODO: test your data augmentation by changing the transforms here!
-    if args.model == 'cnn' or args.model == 'resnet18':
-
-        train_transforms = sstr.Compose([transforms.ToTensor(), nptr.Normalize((0.5,), (0.5,)), ])
-        test_transforms = sstr.Compose([transforms.ToTensor(), nptr.Normalize((0.5,), (0.5,)), ])
-    else:
-        raise NotImplementedError
-    return train_transforms, test_transforms
-
-
-def read_femnist_dir(data_dir):
-    data = defaultdict(lambda: {})
-    files = os.listdir(data_dir)
-    files = [f for f in files if f.endswith('.json')]
-    for f in files:
-        file_path = os.path.join(data_dir, f)
-        with open(file_path, 'r') as inf:
-            cdata = json.load(inf)
-        data.update(cdata['user_data'])
-    return data
-
-
-def read_femnist_data(train_data_dir, test_data_dir=None):
-    """
-    If only one directory was given, the function returns the
-    all_data folder content
-    """
-    if test_data_dir:
-        return read_femnist_dir(train_data_dir), read_femnist_dir(test_data_dir)
-    else:
-        return read_femnist_dir(train_data_dir)
-
-
-def get_datasets(args):
-
-    train_transforms, test_transforms = get_transforms(args)
-
-    train_datasets, test_datasets = [], []
-    if args.federated:
-        # elif args.dataset == 'femnist':
-        niid = args.niid
-        train_data_dir = os.path.join('data', 'femnist', 'data', 'niid' if niid else 'iid', 'train')
-        test_data_dir = os.path.join('data', 'femnist', 'data', 'niid' if niid else 'iid', 'test')
-        train_data, test_data = read_femnist_data(train_data_dir, test_data_dir)
-        total_train_data = len(train_data)
-        print(f'total train data: {total_train_data}')
-
-        for user, data in train_data.items():
-            train_datasets.append(Femnist(data, train_transforms, user))
-        for user, data in test_data.items():
-            test_datasets.append(Femnist(data, test_transforms, user))
-
-        return train_datasets, test_datasets,total_train_data
-    else:
-        all_data_dir = os.path.join('data', 'femnist', 'data', 'all_data')
-        all_data = read_femnist_data(all_data_dir)
-        centralized_datasets = []
-        for user,data in all_data:
-            centralized_datasets.append(Femnist(data, train_transforms, user))
-        print(f'i m here')
-
+###########################################
+## Moved read_femnist_dir, read_femnist_data,
+## get_transforms and get_datasets into utils.utils
+###########################################
 
 def set_metrics(args):
     num_classes = get_dataset_num_classes(args.dataset)
@@ -134,6 +75,7 @@ def set_metrics(args):
     else:
         raise NotImplementedError
     return metrics
+
 
 
 def gen_clients(args, train_datasets, test_datasets, model):
@@ -239,10 +181,6 @@ def main():
     print('Initializing model...')
     model = model_init(args)
     model.cuda()
-    if args.view_summary == True: 
-        print('Summary')
-        print(summary(model,(1, 28, 28)))
-        #exit(1)
     print('Done.')
 
     if args.federated:
@@ -263,7 +201,6 @@ def main():
                 fed_exec(args, model, rot_dataset=rot_dataset)
             else:
                 fed_exec(args, model, train_datasets=train_datasets, test_datasets=test_datasets)
-
     else:
         centralized_exec(args, model)
 
