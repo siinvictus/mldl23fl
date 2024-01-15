@@ -30,7 +30,7 @@ def read_femnist_dir(data_dir):
     return data
 
 
-def read_femnist_data(train_data_dir, test_data_dir=None, args=None):
+def read_femnist_data(args,train_data_dir, test_data_dir=None, args=None):
     """
     If only one directory was given, the function returns the
     all_data folder content
@@ -83,9 +83,9 @@ def get_datasets(args):
         test_data_dir = os.path.join('data', 'femnist', 'data', 'niid' if niid else 'iid', 'test')
 
         if args.rotation:
-            train_data = read_femnist_data(train_data_dir, test_data_dir, args)
+            train_data = read_femnist_data(args=args,train_data_dir, test_data_dir, args)
         else:
-            train_data, test_data = read_femnist_data(train_data_dir, test_data_dir)
+            train_data, test_data = read_femnist_data(args=args,train_data_dir, test_data_dir)
 
         if args.rotation:
             train_rotations = {

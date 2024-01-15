@@ -28,6 +28,7 @@ def get_parser():
                         help='Rotate images for domain generalization')
     parser.add_argument('--loo', action='store_true', default=False,
                         help='apply leave one out for domain generalization')
+    
     parser.add_argument('--seed', type=int, default=0, help='random seed')
     parser.add_argument('--dataset', type=str, default='femnist', choices=['idda', 'femnist'], help='dataset name')
     parser.add_argument('--niid', action='store_true', default=False,
