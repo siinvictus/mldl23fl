@@ -23,7 +23,7 @@ class Server:
 
 
     
-    def select_clients(self,r, update = None,m=None):
+    def select_clients(self,r, update = None,m=None, list_client10=None, list_client90=None, list_p10=None, list_p90=None):
         '''
         This method returns an array with the selected clients for the current round
         The way selection is done is by only considering the min number between
@@ -39,11 +39,6 @@ class Server:
             with 10% of clients being selected with probability 0.5 at each round
             with 30% of clients being selected with probability 0.0001 at each round
             """
-            n10perc = math.ceil(len(self.train_clients)*0.1)
-            list_client10 =  self.train_clients[:n10perc]
-            list_client90 = self.train_clients[n10perc:]
-            list_p10 = [1/n10perc] * n10perc
-            list_p90 = [1/(len(self.train_clients)-n10perc)] * (len(self.train_clients)-n10perc)
             sel_clients = []
             i=0
             while i != (num_clients):
@@ -64,11 +59,6 @@ class Server:
             with 10% of clients being selected with probability 0.5 at each round
             with 30% of clients being selected with probability 0.0001 at each round
             """
-            n30perc = math.ceil(len(self.train_clients)*0.3)
-            list_client10 =  self.train_clients[:n30perc]
-            list_client90 = self.train_clients[n30perc:]
-            list_p10 = [1/n30perc] * n30perc
-            list_p90 = [1/(len(self.train_clients)-n30perc)] * (len(self.train_clients)-n30perc)
             sel_clients = []
             i=0
             while i != (num_clients):
@@ -173,14 +163,42 @@ class Server:
         m = self.args.power_of_choice_m
         print(f'Your m in {m}')
         print(f'The K is {len(self.train_clients)}')
+        
+        list_client10 = None
+        list_client90 = None
+        list_p10 = None
+        list_p90 = None
+        
+        if self.args.client_select == 1:  
+            """
+            with 10% of clients being selected with probability 0.5 at each round
+            with 30% of clients being selected with probability 0.0001 at each round
+            """
+            n10perc = math.ceil(len(self.train_clients)*0.1)
+            list_client10 =  self.train_clients[:n10perc]
+            list_client90 = self.train_clients[n10perc:]
+            list_p10 = [1/n10perc] * n10perc
+            list_p90 = [1/(len(self.train_clients)-n10perc)] * (len(self.train_clients)-n10perc)
+            
+        if self.args.client_select == 2:  
+            num_clients = min(self.args.clients_per_round, len(self.train_clients))
+            """
+            with 10% of clients being selected with probability 0.5 at each round
+            with 30% of clients being selected with probability 0.0001 at each round
+            """
+            n30perc = math.ceil(len(self.train_clients)*0.3)
+            list_client10 =  self.train_clients[:n30perc]
+            list_client90 = self.train_clients[n30perc:]
+            list_p10 = [1/n30perc] * n30perc
+            list_p90 = [1/(len(self.train_clients)-n30perc)] * (len(self.train_clients)-n30perc)
 
         for r in range(self.args.num_rounds):
             # our addition
             # take selected clients
             if r == 0:
-                sel_clients = self.select_clients(r)
+                sel_clients = self.select_clients(r,list_client10=list_client10,list_client90=list_client90, list_p10=list_p10,list_p90=list_p90)
             else:
-                sel_clients = self.select_clients(r,update = train_sel_c, m=m)
+                sel_clients = self.select_clients(r,update = train_sel_c, m=m,list_client10=list_client10,list_client90=list_client90, list_p10=list_p10,list_p90=list_p90)
                 
             if r != 0:
                 self.update_clients_model(aggregated_params=aggregated_params)
