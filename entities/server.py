@@ -74,7 +74,7 @@ class Server:
                         i+=1
         
         elif self.args.client_select == 3:
-            num_clients = min(self.args.clients_per_round, len(self.train_clients)) # d = clients_per_round
+            num_clients = min(self.args.clients_per_round, len(self.train_clients))
             sel_clients = []
             list_pk =list()
             for c in self.train_clients:
