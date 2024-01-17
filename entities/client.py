@@ -116,7 +116,7 @@ class Client:
             
             if self.args.structured == True:
                 print(f'You are using structured pruning')
-            # Specify the pruning method (e.g., L1 unstructured pruning)
+                # Specify the pruning method (e.g., L1 unstructured pruning)
                 if self.args.conv == True:
                     parameters_to_prune = [module for module in filter(lambda m: type(m) == torch.nn.Conv2d,  self.model.modules())]
                 if self.args.linear == True:
