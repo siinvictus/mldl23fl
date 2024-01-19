@@ -84,11 +84,12 @@ class Server:
             for sel_c in sel_clients:
                 _, loss = sel_c.run_epoch()
                 look_loss.append((sel_c, loss))     
-            look_loss = sorted(look_loss, key=lambda l:l[1])
-            print(f'list based on loss {look_loss}')
+            look_loss = sorted(look_loss, key=lambda l:l[1], reverse=True)
+            for i in look_loss:
+                print(f'client {i[0].idx}, with loss {i[1]}')
             sel_clients = []
             for i in range(self.args.power_of_choice_m):
-                sel_clients.append(look_loss[i][1])
+                sel_clients.append(look_loss[i][0])
                 print(f'select clients {look_loss[i][0].idx}, with loss {look_loss[i][1]}')
             
             
