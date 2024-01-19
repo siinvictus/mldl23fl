@@ -76,22 +76,20 @@ class Server:
         elif self.args.client_select == 3:
             num_clients = min(self.args.clients_per_round, len(self.train_clients))
             sel_clients = []
+            look_loss = []
             list_pk =list()
             for c in self.train_clients:
                 list_pk.append(c.get_pk())
-            if r == 0:
-                sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
-            else:
-                selected_D = random.sample(update, self.args.d_clients)
-                update = sorted(selected_D, key=lambda x: x[2], reverse=True)
-                for sel_c in update:
-                    print(f'D randomly selected C highest loss: {sel_c[3].idx}')
-                selected_for_loss = update[:m]  #selected based on the highest loss 
-                sel_clients = np.random.choice(self.train_clients, num_clients-m, p=list_pk, replace=False) #selected based on the pk the remaining 10-m
-                for sel_c in selected_for_loss:
-                    sel_clients = np.append(sel_clients,sel_c[3])
-                    print(f'm selected C highest loss: {sel_c[3].idx}')
-                
+            sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
+            for sel_c in sel_clients:
+                _, loss = sel_c.run_epoch()
+                look_loss.append(sel_c, loss)     
+            sorted(look_loss, key=lambda l:l[1])
+            print(f'list based on loss {look_loss}')
+            for i in range(self.args.power_of_choice_m):
+                sel_clients.append(look_loss[i][1])
+                print(f'select clients {look_loss[i][1].idx}, with loss {look_loss[i][1]}')
+            
             
             
             #print(f'update:{update}')

@@ -143,6 +143,7 @@ class Client:
             sparsity = 100. * float(torch.sum(self.model.conv1.weight == 0)+ torch.sum(self.model.conv2.weight == 0)+ torch.sum(self.model.fc1.weight == 0)+ torch.sum(self.model.fc2.weight == 0)) / float(self.model.conv1.weight.nelement()+ self.model.conv2.weight.nelement()+ self.model.fc1.weight.nelement()+ self.model.fc2.weight.nelement())
                     
         return (len(self.train_loader),self.model.state_dict(), last_epoch_loss, sparsity) 
+    
 
     def test(self, metric, key):
         """
