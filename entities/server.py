@@ -82,7 +82,7 @@ class Server:
                 list_pk.append(c.get_pk())
             sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
             for sel_c in sel_clients:
-                _, loss = sel_c.run_epoch()
+                _, loss = sel_c.no_optim()
                 look_loss.append((sel_c, loss))     
             look_loss = sorted(look_loss, key=lambda l:l[1], reverse=True)
             for i in look_loss:

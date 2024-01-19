@@ -144,6 +144,38 @@ class Client:
                     
         return (len(self.train_loader),self.model.state_dict(), last_epoch_loss, sparsity) 
     
+    def no_optim(self):
+        # There is also scheduler for the learning rate that we will put later.
+        # self.optim_scheduler.step()
+        tot_correct_predictions = 0
+        running_loss = 0.0
+        i = 0
+        for cur_step, (images, labels) in enumerate(self.train_loader):
+            images = images.cuda()
+            labels = labels.cuda()
+
+           #self.optimizer.zero_grad()
+
+            outputs = self.model(images)
+
+            loss = self.criterion(outputs, labels)
+            
+
+            loss.backward()
+            running_loss += loss.item()
+
+            #self.optimizer.step()
+            i +=1
+            
+            predictions = torch.argmax(outputs, dim=1)
+
+            correct_predictions = torch.sum(torch.eq(predictions, labels)).item()
+            tot_correct_predictions += correct_predictions
+
+        loss_for_this_epoch = running_loss / i
+        accuracy = tot_correct_predictions / self.len_dataset * 100
+        return loss_for_this_epoch, accuracy
+        
 
     def test(self, metric, key):
         """
