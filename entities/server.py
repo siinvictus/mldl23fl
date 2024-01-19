@@ -86,6 +86,7 @@ class Server:
                 look_loss.append(sel_c, loss)     
             sorted(look_loss, key=lambda l:l[1])
             print(f'list based on loss {look_loss}')
+            sel_clients = []
             for i in range(self.args.power_of_choice_m):
                 sel_clients.append(look_loss[i][1])
                 print(f'select clients {look_loss[i][1].idx}, with loss {look_loss[i][1]}')
