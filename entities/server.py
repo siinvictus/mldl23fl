@@ -83,7 +83,7 @@ class Server:
             sel_clients = np.random.choice(self.train_clients, num_clients, p=list_pk, replace=False)
             for sel_c in sel_clients:
                 _, loss = sel_c.run_epoch()
-                look_loss.append(sel_c, loss)     
+                look_loss.append((sel_c, loss))     
             sorted(look_loss, key=lambda l:l[1])
             print(f'list based on loss {look_loss}')
             sel_clients = []
