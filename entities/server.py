@@ -226,13 +226,14 @@ class Server:
 
             # Test on the test clients
             test_accuracy = self.test(aggregated_params)
-            print(f"Test Accuracy for round {r + 1}: {test_accuracy:.4f}")
-            print(f"Mean sparsity for round {r + 1} (only for pruning): {mean_sparsity:.4f}")
             test_accuracyp.append(test_accuracy)
             train_accuracyp.append(train_accuracy)
+            print(f"Test Accuracy for round {r + 1}: {test_accuracy:.4f}")
+            print(f"Mean sparsity for round {r + 1} (only for pruning): {mean_sparsity:.4f}")
+
         
         if self.args.tuning == True:
-            train_dict = {'Epochs': np.array(range(self.args.num_rounds)),'Train accuracy': np.array(train_accuracyp), 'Test accuracy': np.array(test_accuracy)}
+            train_dict = {'Epochs': np.array(range(self.args.num_rounds)),'Train accuracy': np.array(train_accuracyp), 'Test accuracy': np.array(test_accuracyn)}
             train_csv = pd.DataFrame(train_dict)
             train_csv.to_csv(f'Federated_Non-IID:{self.args.niid}_LocalEpochs:{self.args.num_epochs}_Lr:{self.args.lr}_momentum:{self.args.m}_wd:{self.args.wd}_batchSize:{self.args.bs}.csv', index = False)
         else:
