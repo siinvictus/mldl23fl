@@ -111,7 +111,7 @@ class Client:
                 print(f"Loss last epochs:{round(last_epoch_loss, 3)}, Accuracy={round(train_accuracy, 2)}%")
         
         if self.args.prune == True:
-            if r > self.args.num_rounds * 0.20:
+            if r > self.args.num_rounds * 0.5:
                 if self.args.conv == False and self.args.linear == False:
                         raise Exception("Choose a layer to prune")
                 
