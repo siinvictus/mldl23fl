@@ -101,7 +101,7 @@ class Server:
                 print(f'selected client id: {c.idx}, pk: {c.get_pk()}')
         return sel_clients
 
-    def train_round(self, clients):
+    def train_round(self, clients,r):
         """
             This method trains the model with the dataset of the clients. It handles the training at single round level
             :param clients: list of all the clients to train
@@ -119,7 +119,7 @@ class Server:
             # which outputs model.state_dic 
             # which has as keys 'layer_weights':
             # layer_bias: 
-            num_samples,client_update,client_loss,sparsity = c.train()
+            num_samples,client_update,client_loss,sparsity = c.train(r)
             updates.append((num_samples,copy.deepcopy(client_update),client_loss,c,sparsity)) #deep copy to not change the original dictionary of client
         return updates
 
@@ -209,7 +209,7 @@ class Server:
 
             # Train the model on the selected clients 
             # and ouputs "updates" the list with state_dic
-            train_sel_c = self.train_round(sel_clients)
+            train_sel_c = self.train_round(sel_clients,r=r)
 
             # Aggregate the updates using FedAvg for the selected clients
             # returns 1 dicitionary with the "final" parameters of the round
